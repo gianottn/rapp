@@ -135,10 +135,15 @@
                     const lines = data.split('\n');
                     lines.forEach(line => {
                         if (line.trim()) {
-                            const [label, link] = line.split('\t');
-                            if (link) {
-                                allLinks.push({ label: label.trim(), link: link.trim() });
+                            // Remove UTF-8 BOM if present, split on ANY whitespace
+                            const parts = line.replace(/\uFEFF/g, '').trim().split(/\s+/);
+
+                            if (parts.length >= 2) {
+                                const label = parts[0];
+                                const link = parts[1];
+                                allLinks.push({ label, link });
                             }
+
                         }
                     });
                 })
